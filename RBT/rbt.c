@@ -8,6 +8,7 @@ struct node
 	int key;
 	struct node* right;
 	struct node* left;
+	struct node* parent;
 	bool black;
 };
 
@@ -20,6 +21,7 @@ node* BSTInsert(RBT root, int key)
 		root->key = key;
 		root->left = NULL;
 		root->right = NULL;
+		root->parent = NULL;
 		return root;
 	}
 	else if(key < root->key)
@@ -30,6 +32,7 @@ node* BSTInsert(RBT root, int key)
 			n->key = key;
 			n->left = NULL;
 			n->right = NULL;
+			n->parent = root;
 			root->left = n;
 			return n;
 		}
@@ -44,6 +47,7 @@ node* BSTInsert(RBT root, int key)
 			n->left = NULL;
 			n->right = NULL;
 			root->right = n;
+			n->parent = root;
 			return n;
 		}
 		return BSTInsert(root->right, key);
@@ -53,11 +57,26 @@ node* BSTInsert(RBT root, int key)
 
 }
 
+node* fixViolations(node* root, node* n)
+{
+	
+	return NULL;
+}
+
 node* insert(RBT root, int key)
 {
 
+	if(root == NULL)
+	{
+		root = BSTInsert(root, key);
+		root->black = true;
+		return root;
+	}
+
 	node* n = BSTInsert(root, key);
 	n->black = false;
+
+	fixViolations(root, n);
 
 	return n;
 
