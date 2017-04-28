@@ -4,6 +4,8 @@
 typedef struct node node;
 typedef node* RBT;
 
+node* BSTInsert(RBT root, int key);
+
 node* insert(RBT root, int key);
 
 //node* removeNode(RBT root, int key);
