@@ -8,7 +8,7 @@ struct node
 	int key;
 	struct node* right;
 	struct node* left;
-	bool r;
+	bool black;
 };
 
 node* BSTInsert(RBT root, int key)
@@ -17,14 +17,35 @@ node* BSTInsert(RBT root, int key)
 	if(root == NULL)
 	{
 		root = (node*) malloc(sizeof(node));
+		root->key = key;
+		root->left = NULL;
+		root->right = NULL;
 		return root;
 	}
 	else if(key < root->key)
 	{
+		if(root->left == NULL)
+		{
+			node* n = (node*) malloc(sizeof(node));
+			n->key = key;
+			n->left = NULL;
+			n->right = NULL;
+			root->left = n;
+			return n;
+		}
 		return BSTInsert(root->left, key);	
 	}
 	else if(key > root->key)
 	{
+		if(root->right == NULL)
+		{
+			node* n = (node*) malloc(sizeof(node));
+			n->key = key;
+			n->left = NULL;
+			n->right = NULL;
+			root->right = n;
+			return n;
+		}
 		return BSTInsert(root->right, key);
 	}
 
