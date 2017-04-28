@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	{
 		insert(tree, nums[i]);
 	}
-	tree = removeNode(tree, nums[0]);
+	tree = removeNode(tree, nums[2]);
 	Traverse(tree);
 	dispose(tree);
 	return 0;

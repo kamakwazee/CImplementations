@@ -62,10 +62,8 @@ node* removeNode(BST root, int key)
 
 	if(root -> key == key)
 	{
-		printf("HELLO\n");
 		if(root->left == NULL && root->right == NULL)
 		{
-			printf("NOOO\n");
 			free(root);
 			return NULL;
 		}
@@ -73,33 +71,67 @@ node* removeNode(BST root, int key)
 		parent = root;
 		if(root->right != NULL)
 		{
-			printf("AYY\n");
 			child = parent->right;
 
-			while(child->left != NULL)
+			if(child->left == NULL)
 			{
-				parent = child;
-				child = parent->left;
+				free(root);
+				root = child;
 			}
-			parent->left = child->right;
-			child->left = root->left;
-			child->right = root->right;
-			return child;	
+			else
+			{
+				while(child->left != NULL)
+				{
+					parent = child;
+					child = parent->left;
+				}
+				parent->left = child->right;
+				child->left = root->left;
+				child->right = root->right;
+				free(root);
+			}
 		}
-
-		child = parent->left;
-
-		while(child->right != NULL)
+		else
 		{
-			parent = child;
-			child = parent->right;
+			child = parent->left;
+
+			if(child->right == NULL)
+			{
+				free(root);
+				root = child;
+			}
+			else
+			{
+				while(child->right != NULL)
+				{
+					parent = child;
+					child = parent->right;
+				}
+				parent->right = child->left;
+				child->left = root->left;
+				child->right = root->right;
+				free(root);
+			}	
 		}
-		parent->right = child->left;
-		child->left = root->left;
-		child->right = root->right;
-		
-		printf("WTF\n");
 		return child;
+	}
+	else if(key > root->key)
+	{
+		if(root->right != NULL)
+		{
+			node* r = removeNode(root->right, key);
+			root->right = r;
+		}
+		return root;
+	}
+	else if(key < root->key)
+	{
+		if(root->left != NULL)
+		{
+			node* r = removeNode(root->left, key);
+			root->left = r;
+		}
+		return root;
 	}
 	return NULL;
 
@@ -142,13 +174,3 @@ void dispose(BST root) {
 
 }
 
-/*int main(void)
-{
-
-	BST tree = NULL;
-	tree = insert(tree, 20);
-	insert(tree, 25);
-	insert(tree, 15);
-	Traverse(tree);
-
-}*/
