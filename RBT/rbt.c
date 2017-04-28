@@ -56,9 +56,10 @@ node* BSTInsert(RBT root, int key)
 node* insert(RBT root, int key)
 {
 
-	root = BSTInsert(root, key);
+	node* n = BSTInsert(root, key);
+	n->black = false;
 
-	return root;
+	return n;
 
 }
 
@@ -75,7 +76,7 @@ void Traverse(RBT root)
 		Traverse(root->left);
 	}
 
-	printf("key=%i\n",root->key);
+	printf("key=%i\tcolor=%i\n",root->key,root->black);
 
 	if(root->right != NULL)
 	{
