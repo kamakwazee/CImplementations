@@ -57,15 +57,230 @@ node* BSTInsert(RBT root, int key)
 
 }
 
+node* rotateRight(node* n, node* p, node* gp)
+{
+
+	printf("Rotate Right\n");
+	gp->left = p->right;
+	p->parent = gp->parent;
+	gp->parent = p;
+	p->right = gp;
+	p->black = true;
+	gp->black = false;
+
+	return p;
+
+}
+
+node* rotateLeft(node* n, node*p, node* gp)
+{
+
+	printf("Rotate Left\n");
+	gp->right = p->left;
+	p->parent = gp->parent;
+	gp->parent = p;
+	p->left = gp;
+	p->black = true;
+	gp->black = false;
+
+	return p;
+
+}
+
 node* fixViolations(node* root, node* n)
 {
+	printf("Fix Violations\n");
 	
-	return NULL;
+	node* gg = NULL; 						// great grandparent
+	node* gp = NULL; 						// grandparent
+	node* p = NULL; 						// parent
+	node* u = NULL; 						// uncle
+	
+	while(n != root && !n->black && !n->parent->black)
+	{
+		printf("WHILE\n");
+		p = n->parent;
+		gp = p->parent;
+
+		if(p == gp->left)
+		{
+			printf("Parent Left\n");
+			u = gp->right;
+		
+			if(u != NULL)
+			{
+				if(!u->black)
+				{
+					printf("Uncle Red\n");
+					p->black = true;
+					u->black = true;
+					gp->black = false;
+					n = gp;
+					continue;
+				}
+			}
+			
+			if(n == p->left)
+			{
+				printf("Left Left\n");
+				gg = gp->parent;
+				if(gg == NULL)
+				{
+					root = rotateRight(n, p, gp);
+					printf("root=%i\n",root->key);
+				}
+				else
+				{
+					if(gp == gg->left)
+					{
+						gg->left = rotateRight(n, p, gp);
+					}
+					else
+					{
+						gg->right = rotateRight(n, p, gp);
+					}
+				}
+				
+			}
+			else
+			{
+				printf("Left Right\n");
+				gg = gp->parent;
+			
+				gp->left = rotateLeft(n->right, n, p);
+				if(gg == NULL)
+				{
+					root = rotateRight(p, n, gp);
+					printf("root=%i\n",root->key);
+				}
+				else
+				{
+					if(gp == gg->left)
+					{
+						gg->left = rotateRight(p, n, gp);
+					}
+					else
+					{
+						gg->right = rotateRight(p, n, gp);
+					}
+				}
+				
+			}
+
+		}
+		else
+		{
+			printf("Parent Right\n");
+
+			if(u != NULL)
+			{
+				if(!u->black)
+				{
+					printf("Uncle Red\n");
+					p->black = true;
+					u->black = true;
+					gp->black = false;
+					n = gp;
+					continue;
+				}
+			}
+		
+			
+			if(n == p->right)
+			{
+				printf("Right Right\n");
+				gg = gp->parent;
+
+				if(gg == NULL)
+				{
+					root = rotateLeft(n, p, gp);
+					printf("root=%i\n", root->key);
+				}
+				else
+				{
+					if(gp == gp->left)
+					{
+						gg->left = rotateLeft(n, p, gp);
+					}
+					else
+					{
+						gg->right = rotateLeft(n, p, gp);
+					}
+				}
+				
+			}
+			else
+			{
+				printf("Right Left\n");
+				gg = gp->parent;
+				
+				gp->right = rotateRight(n->left, n, p);
+				if(gg == NULL)
+				{
+					root = rotateLeft(p, n, gp);
+				}
+				else
+				{
+					if(gp == gg->left)
+					{
+						gg->left = rotateLeft(p, n, gp);
+					}
+					else
+					{
+						gg->right = rotateLeft(p, n, gp);
+					}
+				}
+			}
+		}
+
+	}
+	root->black = true;
+	return root;
+}
+
+void dump(node* n, int level, int dir)
+{
+
+	if(n == NULL)
+	{
+		return;
+	}
+
+	for(int i = 0; i < level; i++)
+	{
+		printf("-");
+	}
+	if(dir == 0)
+	{
+		printf("L");
+	}
+	else if(dir == 1)
+	{
+		printf("R");
+	}
+	else
+	{
+		printf("T");
+	}
+
+	printf("-(%i)\n", n->key);
+
+	if(n->left != NULL)
+	{
+		dump(n->left, level+1, 0);
+	}
+
+	if(n->right != NULL)
+	{
+		dump(n->right, level+1, 1);
+	}
+
 }
 
 node* insert(RBT root, int key)
 {
 
+	printf("Insert %i\n", key);
 	if(root == NULL)
 	{
 		root = BSTInsert(root, key);
@@ -75,10 +290,16 @@ node* insert(RBT root, int key)
 
 	node* n = BSTInsert(root, key);
 	n->black = false;
-
-	fixViolations(root, n);
-
-	return n;
+	
+	printf("Before\n");
+	//Traverse(root);
+	dump(root, 0, 2);
+	root = fixViolations(root, n);
+	printf("After\n");
+	dump(root, 0, 2);
+	printf("done dumping\n");
+	//Traverse(root);
+	return root;
 
 }
 

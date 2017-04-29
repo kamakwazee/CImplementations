@@ -33,9 +33,12 @@ int main(int argc, char** argv)
 	tree = insert(tree, nums[0]);
 	for(int i = 1; i < argc-1; i++)
 	{
-		insert(tree, nums[i]);
+		
+		printf("ay %i\n", i);
+		tree = insert(tree, nums[i]);
 	}
 	//tree = removeNode(tree, nums[2]);
+	printf("Traverse\n");
 	Traverse(tree);
 	dispose(tree);
 	return 0;
