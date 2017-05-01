@@ -38,7 +38,10 @@ int main(int argc, char** argv)
 		tree = insert(tree, nums[i]);
 	}
 	//tree = removeNode(tree, nums[2]);
-	printf("Traverse\n");
+	//printf("Traverse\n");
+	printf("\n\n");
+	dump(tree, 0, 2);
+	printf("\n\n");
 	Traverse(tree);
 	dispose(tree);
 	return 0;

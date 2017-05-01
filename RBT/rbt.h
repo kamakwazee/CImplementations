@@ -10,6 +10,8 @@ node* insert(RBT root, int key);
 
 //node* removeNode(RBT root, int key);
 
+void dump(node* n, int level, int dir);
+
 void Traverse(RBT root);
 
 void dispose(RBT root);

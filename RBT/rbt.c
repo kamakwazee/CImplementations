@@ -72,7 +72,7 @@ node* rotateRight(node* n, node* p, node* gp)
 
 }
 
-node* rotateLeft(node* n, node*p, node* gp)
+node* rotateLeft(node* n, node* p, node* gp)
 {
 
 	printf("Rotate Left\n");
@@ -133,10 +133,12 @@ node* fixViolations(node* root, node* n)
 				{
 					if(gp == gg->left)
 					{
+						printf("Grandparent Left\n");
 						gg->left = rotateRight(n, p, gp);
 					}
 					else
 					{
+						printf("Grandparent Right\n");
 						gg->right = rotateRight(n, p, gp);
 					}
 				}
@@ -157,10 +159,12 @@ node* fixViolations(node* root, node* n)
 				{
 					if(gp == gg->left)
 					{
+						printf("Grandparent Left\n");
 						gg->left = rotateRight(p, n, gp);
 					}
 					else
 					{
+						printf("Grandparent Right\n");
 						gg->right = rotateRight(p, n, gp);
 					}
 				}
@@ -198,12 +202,14 @@ node* fixViolations(node* root, node* n)
 				}
 				else
 				{
-					if(gp == gp->left)
+					if(gp == gg->left)
 					{
+						printf("Grandparent Left\t%i\n", gp->key);
 						gg->left = rotateLeft(n, p, gp);
 					}
 					else
 					{
+						printf("Grandparent Right\t%i %i %i\n", gg->left->key, gp->key, gg->key);
 						gg->right = rotateLeft(n, p, gp);
 					}
 				}
@@ -214,7 +220,7 @@ node* fixViolations(node* root, node* n)
 				printf("Right Left\n");
 				gg = gp->parent;
 				
-				gp->right = rotateRight(n->left, n, p);
+			gp->right = rotateRight(n->left, n, p);
 				if(gg == NULL)
 				{
 					root = rotateLeft(p, n, gp);
@@ -223,10 +229,12 @@ node* fixViolations(node* root, node* n)
 				{
 					if(gp == gg->left)
 					{
+						printf("Grandparent Left\n");
 						gg->left = rotateLeft(p, n, gp);
 					}
 					else
 					{
+						printf("Grandparent Right\n");
 						gg->right = rotateLeft(p, n, gp);
 					}
 				}
@@ -263,7 +271,7 @@ void dump(node* n, int level, int dir)
 		printf("T");
 	}
 
-	printf("-(%i)\n", n->key);
+	printf("-(%i %i)\n", n->key, n->black);
 
 	if(n->left != NULL)
 	{
@@ -345,6 +353,7 @@ void dispose(RBT root)
 		root->right = NULL;
 	}
 
+	//printf("Free %i\n", root->key);
 	free(root);
 
 }
