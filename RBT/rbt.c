@@ -61,6 +61,7 @@ node* rotateRight(node* n, node* p, node* gp)
 {
 
 	printf("Rotate Right\n");
+	
 	gp->left = p->right;
 	p->parent = gp->parent;
 	gp->parent = p;
@@ -76,6 +77,7 @@ node* rotateLeft(node* n, node* p, node* gp)
 {
 
 	printf("Rotate Left\n");
+	
 	gp->right = p->left;
 	p->parent = gp->parent;
 	gp->parent = p;
@@ -119,7 +121,7 @@ node* fixViolations(node* root, node* n)
 					continue;
 				}
 			}
-			
+			printf("Uncle Black\n");
 			if(n == p->left)
 			{
 				printf("Left Left\n");
@@ -148,8 +150,8 @@ node* fixViolations(node* root, node* n)
 			{
 				printf("Left Right\n");
 				gg = gp->parent;
-			
 				gp->left = rotateLeft(n->right, n, p);
+				dump(root, 0, 2);
 				if(gg == NULL)
 				{
 					root = rotateRight(p, n, gp);
@@ -164,7 +166,7 @@ node* fixViolations(node* root, node* n)
 					}
 					else
 					{
-						printf("Grandparent Right\n");
+						printf("Grandparent Right %i %i %i\n", gg->key, gp->key, gp->parent->key);
 						gg->right = rotateRight(p, n, gp);
 					}
 				}
@@ -175,7 +177,8 @@ node* fixViolations(node* root, node* n)
 		else
 		{
 			printf("Parent Right\n");
-
+			
+			u = gp->left;
 			if(u != NULL)
 			{
 				if(!u->black)
@@ -189,7 +192,7 @@ node* fixViolations(node* root, node* n)
 				}
 			}
 		
-			
+			printf("Uncle Black\n");
 			if(n == p->right)
 			{
 				printf("Right Right\n");
@@ -197,6 +200,7 @@ node* fixViolations(node* root, node* n)
 
 				if(gg == NULL)
 				{
+					printf("Great Grandparent NULL\n");
 					root = rotateLeft(n, p, gp);
 					printf("root=%i\n", root->key);
 				}
@@ -220,7 +224,7 @@ node* fixViolations(node* root, node* n)
 				printf("Right Left\n");
 				gg = gp->parent;
 				
-			gp->right = rotateRight(n->left, n, p);
+				gp->right = rotateRight(n->left, n, p);
 				if(gg == NULL)
 				{
 					root = rotateLeft(p, n, gp);
@@ -353,7 +357,7 @@ void dispose(RBT root)
 		root->right = NULL;
 	}
 
-	//printf("Free %i\n", root->key);
+	printf("Free %i\n", root->key);
 	free(root);
 
 }
